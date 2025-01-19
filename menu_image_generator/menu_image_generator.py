@@ -1,6 +1,7 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 from tkinter import messagebox, filedialog
+
+from PIL import Image, ImageTk
 
 class MenuImageGenerator(tk.Frame):
 
@@ -20,7 +21,11 @@ class MenuImageGenerator(tk.Frame):
         self.preview_window = MenuImagePreview(self)
 
         self.initialize_images()
+        self.create_interface()
+        self.update_previews()
 
+
+    def create_interface(self):
         self.button_frame = tk.Frame(self)
         self.button_frame.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
 
@@ -39,20 +44,16 @@ class MenuImageGenerator(tk.Frame):
         self.destination_label = tk.Label(self.button_frame, text="Destination: Not selected", anchor="w")
         self.destination_label.grid(row=14, column=0, columnspan=3, padx=5, pady=5, sticky="w")
         tk.Button(self.button_frame, text="Select destination", command=self.select_destination).grid(row=15, column=0, columnspan=3, pady=5)
-
-
         tk.Button(self.button_frame, text="Export", command=self.export_images, bg="green", fg="white").grid(row=16, column=0, columnspan=3, pady=10)
-
-        self.update_previews()
 
 
     def create_transparent_image(self):
-        """Crea una imagen transparente."""
+        """Create a transparent image."""
         return Image.new("RGBA", (self.img_width, self.img_height), (0, 0, 0, 0))
     
 
     def update_previews(self):
-        """Actualiza las imágenes de vista previa y botones."""
+        """Updates preview images and buttons."""
         total_images = int(self.selected_option.get())  # 8 o 13
         for i in range(13):
             preview_img = self.images[i].resize((self.preview_width, self.preview_height), Image.Resampling.LANCZOS)
@@ -67,7 +68,7 @@ class MenuImageGenerator(tk.Frame):
 
 
     def initialize_images(self):
-        """Inicializa las imágenes con transparencias por defecto."""
+        """Initializes images with default transparencies."""
         self.images = [self.create_transparent_image() for _ in range(13)]
         self.previews = []
         for i in range(13):
@@ -80,7 +81,7 @@ class MenuImageGenerator(tk.Frame):
 
 
     def load_image(self, index):
-        """Carga una imagen en la posición especificada."""
+        """Loads an image to the specified position."""
         filepath = filedialog.askopenfilename()
         if not filepath:
             return
@@ -95,7 +96,7 @@ class MenuImageGenerator(tk.Frame):
 
 
     def select_destination(self):
-        """Selecciona la carpeta de destino."""
+        """Select the destination folder."""
         global export_path
         export_path = filedialog.askdirectory()
         if export_path:
@@ -103,7 +104,7 @@ class MenuImageGenerator(tk.Frame):
 
 
     def export_images(self):
-        """Exporta las imágenes unificadas."""
+        """Export unified images."""
         if not export_path:
             messagebox.showerror("Error", "Please select a destination.")
             return
