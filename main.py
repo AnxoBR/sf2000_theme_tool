@@ -1,5 +1,8 @@
 import tkinter as tk
+from functools import partial
+
 from menu_image_generator.menu_image_generator import MenuImageGenerator
+from zfb_generator.zfb_generator import ZFBGenerator
 
 
 class SF2000ThemeTool(tk.Tk):
@@ -46,7 +49,7 @@ class SideMenu(tk.Frame):
         
         button_position = 0
         for tool, title in self.menu_buttons.items():
-            button = tk.Button(self, text=title, command=lambda: self.change_tool(tool))
+            button = tk.Button(self, text=title, command=partial(self.change_tool, tool))
             button.grid(row=button_position, column=0, sticky='ew')
             button_position += 1
 
@@ -61,7 +64,7 @@ class SideMenu(tk.Frame):
             case 'theme_image_generator':
                 self.master.change_frame(MenuImageGenerator(self.master))
             case 'zfb_generator':
-                self.master.change_frame(MenuImageGenerator(self.master))
+                self.master.change_frame(ZFBGenerator(self.master))
             case _:
                 self.master.change_frame(Home(self.master))
 
